@@ -3,9 +3,12 @@
 import React, { useState } from 'react';
 // import { useHistory } from 'react-router-dom';
 // import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 import { useNavigate } from 'react-router-dom';
 // import todomain from './todomain';
 import './Login.css';
+import 'react-toastify/dist/ReactToastify.css'
 
 function Login()   {
   const [username, setUsername] = useState('');
@@ -15,7 +18,14 @@ function Login()   {
   const handleLogin = () => {
     // Implement your login logic here
     // history.push('/todomain');
+    if(username.match("^[a-zA-Z0-9]+@gmail\.com$")!=null){
     navigate('/todomain');
+    }
+    else{
+
+      console.log("Use Correct Username");
+      toast.error('Please enter a valid username (e.g., example@gmail.com)');
+    }
     console.log('Login button clicked');
     console.log('Username:', username);
     console.log('Password:', password);
@@ -42,6 +52,7 @@ function Login()   {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
+        <ToastContainer />
         <br />
         <button type="button" onClick={handleLogin}>
           Login
