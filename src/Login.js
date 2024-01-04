@@ -9,11 +9,33 @@ function Login()   {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate('/todomain');
-  const handleLogin = () => {
+  const handleLogin = async() => {
    
-    if(username.match("^[a-zA-Z0-9]+@gmail.com$")!=null&&(validateUser(username,password))){
+    if(username.match("^[a-zA-Z0-9]+@gmail.com$")!=null){
+
+      const response = await fetch('http://localhost:8080/demo/checkuser?email='+username+"&passwd="+password, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      //   body: JSON.stringify(userData),
+      });
+      console.log('User registration successful:', response.ok);
+  
+      if (response.ok) {
+        const data = response.text();
+        console.log('User Login successful:', data);
+        navigate('/todomain');
+
+        // Handle successful registration, such as redirecting or showing a success message
+      } else {
+        console.error('User Login failed:', response.statusText);
+        // Handle registration failure, such as showing an error message
+        toast.error('User does not exist');
+
+      }
+
      
-    navigate('/todomain');
     }
     else{
 
@@ -25,27 +47,7 @@ function Login()   {
     console.log('Password:', password);
   };
 
-  const validateUser = async() => {
-  
-    const response = await fetch('http://localhost:8080/demo/checkuser?name='+username+"&passwd="+password, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    //   body: JSON.stringify(userData),
-    });
-    console.log('User registration successful:', response);
 
-    if (await response.status===200) {
-      const data = response.text();
-      console.log('User registration successful:', data);
-      // Handle successful registration, such as redirecting or showing a success message
-    } else {
-      console.error('User registration failed:', response.statusText);
-      // Handle registration failure, such as showing an error message
-    }
-  
-  };
 
   const handleRegistration = () => {
 
@@ -59,7 +61,7 @@ function Login()   {
       <h2>Login</h2>
       <form>
         <label>
-          Username:
+          Email:
           <input
             type="text"
             value={username}

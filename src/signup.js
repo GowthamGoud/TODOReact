@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './signup.css';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -8,13 +8,16 @@ function Signup()   {
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
   const [Name, setName] = useState('');
-//   const navigate = useNavigate('/todomain');
+  const navigate = useNavigate('/');
 
-
+  const handleLogin = async () =>  {
+    navigate('/');
+}
 
   
 
   const handleSignup = async () =>  {
+
     if(Username.match("^[a-zA-Z0-9]+@gmail.com$")!=null){
         try {
 
@@ -23,20 +26,26 @@ function Signup()   {
               headers: {
                 'Content-Type': 'application/json',
               },
-            //   body: JSON.stringify(userData),
             });
-            console.log('User registration successful:', response);
+            console.log('User registration successful:', response.ok);
 
-            if (await response.status===200) {
-              const data = response.text();
-              console.log('User registration successful:', data);
+           
+
+            if (response.ok) {
+            //   const data = response.text();
+              console.log('User registration successful!');
+              toast.success("user created successfully!");
+              
               // Handle successful registration, such as redirecting or showing a success message
             } else {
-              console.error('User registration failed:', response.statusText);
+            //   console.error('User registration failed:', responseData.text);
+              toast.error("User registration failed");
+
               // Handle registration failure, such as showing an error message
             }
           } catch (error) {
             console.error('Error during registration:', error);
+            toast.error(error);
           }
     }
     else{
@@ -84,6 +93,10 @@ function Signup()   {
        
         <button type="button" onClick={handleSignup}>
           Register.
+        </button>
+<br/>
+        <button type="button" onClick={handleLogin}>
+          Back To Login.
         </button>
       </form>
     </div>
